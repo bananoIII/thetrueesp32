@@ -2,8 +2,41 @@ const express = require('express')
 const pool = require('../lib/database')
 const router = express.Router()
 
-router.post('/api/set_assistance', async(req,res) =>{
+router.post('/api/get_assistances', async(req,res) =>{
+    try {
+         // Realiza la consulta a la base de datos para obtener todos los trabajadores
+        const result = await pool.query("select d.departameto, concat(t.nombre, ' ', t.apellido_paterno, ' ', t.apellido_materno) as nombre_completo, te.ubicacion, a.fecha_asistencia, a.hora_asistencia from asistencias a join  "+
+                "trabajadores t on a.id_trabajador = t.id join departamentos d on t.id_departamento = d.id join terminales te on a.id_terminal = te.id;");
+        
+        // Si no hay trabajadores, enviamos un mensaje vacío
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron trabajadores' });
+        }
 
+        // Enviamos la respuesta con los trabajadores obtenidos
+        res.status(200).json(result.rows);
+    } catch (error) {
+        
+    }
+})
+
+router.post('/api/get_assistances/:id', async(req,res) =>{
+    try {
+        const id = req.params.id;
+         // Realiza la consulta a la base de datos para obtener todos los trabajadores
+        const result = await pool.query("select d.departameto, concat(t.nombre, ' ', t.apellido_paterno, ' ', t.apellido_materno) as nombre_completo, te.ubicacion, a.fecha_asistencia, a.hora_asistencia from asistencias a join  "+
+                "trabajadores t on a.id_trabajador = t.id join departamentos d on t.id_departamento = d.id join terminales te on a.id_terminal = te.id where t.id = "+id );
+        
+        // Si no hay trabajadores, enviamos un mensaje vacío
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron asisitencias' });
+        }
+
+        // Enviamos la respuesta con los trabajadores obtenidos
+        res.status(200).json(result.rows);
+    } catch (error) {
+        
+    }
 })
 
 router.get('/api/workers', async (req,res) => {
