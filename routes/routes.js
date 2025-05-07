@@ -2,7 +2,7 @@ const express = require('express')
 const pool = require('../lib/database')
 const router = express.Router()
 
-router.post('/api/get_assistances', async(req,res) =>{
+router.get('/api/get_assistances', async(req,res) =>{
     try {
          // Realiza la consulta a la base de datos para obtener todos los trabajadores
         const result = await pool.query("select d.departameto, concat(t.nombre, ' ', t.apellido_paterno, ' ', t.apellido_materno) as nombre_completo, te.ubicacion, a.fecha_asistencia, a.hora_asistencia from asistencias a join  "+
@@ -20,7 +20,7 @@ router.post('/api/get_assistances', async(req,res) =>{
     }
 })
 
-router.post('/api/get_assistances/:id', async(req,res) =>{
+router.get('/api/get_assistances/:id', async(req,res) =>{
     try {
         const id = req.params.id;
          // Realiza la consulta a la base de datos para obtener todos los trabajadores
