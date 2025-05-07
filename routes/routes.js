@@ -5,7 +5,7 @@ const router = express.Router()
 router.get('/api/get_assistances', async(req,res) =>{
     try {
          // Realiza la consulta a la base de datos para obtener todos los trabajadores
-        const result = await pool.query("select d.departameto, concat(t.nombre, ' ', t.apellido_paterno, ' ', t.apellido_materno) as nombre_completo, te.ubicacion, a.fecha_asistencia, a.hora_asistencia from asistencias a join  "+
+        const result = await pool.query("select d.departamento, concat(t.nombre, ' ', t.apellido_paterno, ' ', t.apellido_materno) as nombre_completo, te.ubicacion, a.fecha_asistencia, a.hora_asistencia from asistencias a join  "+
                 "trabajadores t on a.id_trabajador = t.id join departamentos d on t.id_departamento = d.id join terminales te on a.id_terminal = te.id;");
         
         // Si no hay trabajadores, enviamos un mensaje vacío
@@ -16,7 +16,7 @@ router.get('/api/get_assistances', async(req,res) =>{
         // Enviamos la respuesta con los trabajadores obtenidos
         res.status(200).json(result.rows);
     } catch (error) {
-        
+        console.log(error)
     }
 })
 
@@ -24,7 +24,7 @@ router.get('/api/get_assistances/:id', async(req,res) =>{
     try {
         const id = req.params.id;
          // Realiza la consulta a la base de datos para obtener todos los trabajadores
-        const result = await pool.query("select d.departameto, concat(t.nombre, ' ', t.apellido_paterno, ' ', t.apellido_materno) as nombre_completo, te.ubicacion, a.fecha_asistencia, a.hora_asistencia from asistencias a join  "+
+        const result = await pool.query("select d.departamento, concat(t.nombre, ' ', t.apellido_paterno, ' ', t.apellido_materno) as nombre_completo, te.ubicacion, a.fecha_asistencia, a.hora_asistencia from asistencias a join  "+
                 "trabajadores t on a.id_trabajador = t.id join departamentos d on t.id_departamento = d.id join terminales te on a.id_terminal = te.id where t.id = "+id );
         
         // Si no hay trabajadores, enviamos un mensaje vacío
@@ -35,7 +35,7 @@ router.get('/api/get_assistances/:id', async(req,res) =>{
         // Enviamos la respuesta con los trabajadores obtenidos
         res.status(200).json(result.rows);
     } catch (error) {
-        
+         console.log(error)
     }
 })
 
